@@ -6,12 +6,14 @@ from pprint import pprint
 key = 'https://api.hh.ru/vacancies'
 
 def user_interaction():
+    """Функция взаимодействия с пользователем"""
 
     to_json = JSON_saver()
     api_call_result = []
 
 
     def user_search(request):
+        """Задание ключевого слова для обращения к API, запись результатов в api_call_results"""
         call = Api_call()
         vacancies = []
 
@@ -20,10 +22,9 @@ def user_interaction():
 
         api_call_result.extend(vacancies)
 
-    def get_top_n():
-        return user_request
 
     def key_word_search(request):
+        """Задаем дополнительное ключевое слово для поиска среди полученных вакансий"""
         vacansies_with_key = []
         for vac in api_call_result:
             for value in vac.values():
@@ -48,7 +49,7 @@ def user_interaction():
     try:
         user_request = int(input("Далее мы покажем вам вакансии с лучшими зарплатами.\n"
                                  "Введите цифрой количество вакансий, которое вас интересует (по умолчанию покажем 5): "))
-        pprint(api_call_result[:-get_top_n()-1:-1])
+        pprint(api_call_result[:-user_request-1:-1])
     except Exception:
         pprint(api_call_result[:-6:-1])
 

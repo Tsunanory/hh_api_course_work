@@ -4,20 +4,21 @@ import requests
 
 
 class Headhunter_api(ABC):
-
+    """Абстрактный метод, обязующий потомка определить метод получения вакансий"""
     @abstractmethod
     def get_vacancies(self):
         pass
 
 
 class Vacancy_json(ABC):
-
+    """Абстрактный метод, обязующий потомка определить метод записи в JSON"""
     @abstractmethod
     def vacancy_to_json(self, vacancy):
         pass
 
 
 class Api_call(Headhunter_api):
+    """Обращение к API с поисковым запросом. Вызываемый класс."""
 
     def get_vacancies(self, key, request):
         api_call = requests.get(key, {"text": request,
@@ -29,7 +30,7 @@ class Api_call(Headhunter_api):
 
 
 class Vacancy():
-
+    """Облекание запроса API в предпочтительный формат, приведение валют к рублю"""
     def __init__(self, response):
         self.name = response["name"]
         self.link = response["url"]
@@ -57,6 +58,7 @@ class Vacancy():
 
 
     def __eq__(self, other):
+        """Выявление вакансий равных по зарплате"""
         if self.from_sal and other.from_sal:
             return self.from_sal == other.from_sal
         if self.to_sal and other.to_sal:
@@ -67,6 +69,7 @@ class Vacancy():
             return self.from_sal == other.to_sal
 
     def __lt__(self, other):
+        """Выявление меньшей по зарплате вакансии"""
         if self.from_sal and other.from_sal:
             return self.from_sal < other.from_sal
         if self.to_sal and other.to_sal:
@@ -77,6 +80,7 @@ class Vacancy():
             return self.from_sal < other.to_sal
 
     def __gt__(self, other):
+        """Выявление большей по зарплате вакансии"""
         if self.from_sal and other.from_sal:
             return self.from_sal > other.from_sal
         if self.to_sal and other.to_sal:
@@ -91,7 +95,7 @@ class Vacancy():
 
 
 class JSON_saver(Vacancy_json):
-
+    """Сохранение всех результатов обращения к API в JSON. Вызываемый класс."""
     def vacancy_to_json(self, vacancies, path):
         data = {"items": vacancies}
         with open(path, 'w', encoding='utf-8') as json_file:

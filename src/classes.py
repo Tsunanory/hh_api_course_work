@@ -21,7 +21,7 @@ class Api_call(Headhunter_api):
 
     def get_vacancies(self, key, request):
         api_call = requests.get(key, {"text": request,
-                                "area": "113", "per_page": 2, "page": 1}).json()
+                                "area": "113", "per_page": 100, "page": 1}).json()
         return api_call
 
     def __call__(self, key, request):

@@ -10,10 +10,8 @@ def user_search(request):
     """Задание ключевого слова для обращения к API, запись результатов в api_call_results"""
     call = Api_call()
     vacancies = []
-
     for vac in call(key, request)["items"]:
         vacancies.append(Vacancy(vac).__dict__)
-
     api_call_result.extend(vacancies)
 
 
@@ -24,7 +22,6 @@ def key_word_search(request):
         for value in vac.values():
             if isinstance(value, str) and request in value:
                 vacansies_with_key.append(vac)
-
     return vacansies_with_key
 
 

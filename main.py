@@ -13,12 +13,13 @@ def user_search(request):
     for vac in call(key, request)["items"]:
         vacancies.append(Vacancy(vac).__dict__)
     api_call_result.extend(vacancies)
+    return vacancies
 
 
-def key_word_search(request):
+def key_word_search(request, vac_list):
     """Задаем дополнительное ключевое слово для поиска среди полученных вакансий"""
     vacansies_with_key = []
-    for vac in api_call_result:
+    for vac in vac_list:
         for value in vac.values():
             if isinstance(value, str) and request in value:
                 vacansies_with_key.append(vac)
@@ -28,7 +29,6 @@ def key_word_search(request):
 
 def user_interaction():
     """Функция взаимодействия с пользователем"""
-
     cnt = 0
     while not api_call_result:
         if cnt == 0:
@@ -52,19 +52,20 @@ def user_interaction():
 
     user_request = 'aaaaaaaaaaaaaaaaaaaaaaa'
     cnt1 = 0
-    while not key_word_search(user_request):
+    while not key_word_search(user_request, api_call_result):
         if cnt1 == 0:
             user_request = input(
                 "Вы также можете получить список вакансий, которые содержат дополнительное ключевое слово.\n"
                 "Введите слово для поиска: ").lower()
-            pprint(key_word_search(user_request))
+            pprint(key_word_search(user_request, api_call_result))
             cnt1 += 1
         else:
             user_request = input(
                 "По заданному запросу ничего не нашли.\n"
                 "Введите новое слово для поиска: ").lower()
-            pprint(key_word_search(user_request))
+            pprint(key_word_search(user_request, api_call_result))
 
     return 'Спасибо за использование :)'
 
-print(user_interaction())
+if __name__ == "__main__":
+    pprint(user_interaction())

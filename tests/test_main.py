@@ -51,6 +51,5 @@ def test_user_search():
     assert len(testing_user_search("Vacancy")) != 0
 
 
-
 def test_key_word_search():
     assert len(key_word_search("Vacancy", vacs)) != 0
